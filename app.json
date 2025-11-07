@@ -13,17 +13,35 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.jjay3333.APP-PO",
+       "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "ແອັບນີ້ຕ້ອງການໃຊ້ຕຳແໜ່ງເພື່ອສະແດງຂໍ້ມູນ Wi-Fi."
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.jjay3333.APP_PO",
+      "permissions": [
+        "ACCESS_WIFI_STATE",
+        "ACCESS_NETWORK_STATE",
+        "ACCESS_FINE_LOCATION"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-font"
+      
+    ],
+    "fonts": [
+      "./assets/fonts/NotoSansLao/NotoSansLao-Bold.ttf",
+      "./assets/fonts/NotoSansLao/NotoSansLao-Regular.ttf"
+    ]
   }
 }
