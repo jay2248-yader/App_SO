@@ -3,11 +3,15 @@ import { Alert } from "react-native";
 import useDeviceInfo from "./useDeviceInfo";
 import { login } from "../services/authService";
 import { useCheckLogin } from "./useCheckLogin";
+import { useAuthStore } from "../store/authStore"; // ✅ import store เข้ามา
 
 export default function useLogin() {
   const [loading, setLoading] = useState(false);
   const { getDeviceInfo } = useDeviceInfo();
   const { checkLogin } = useCheckLogin();
+
+  // ✅ ดึง setToken / setUser จาก Zustand
+  const { setToken, setUser } = useAuthStore();
 
   const handleLogin = async (username, password) => {
     if (!username || !password) {
@@ -20,10 +24,8 @@ export default function useLogin() {
       const deviceInfo = await getDeviceInfo();
       console.log("📱 Device Info:", deviceInfo);
 
-      // Step 1: Check login first
+      // ✅ ดึง networkIdentifier
       let networkIdentifier = deviceInfo.wifiName;
-
-      // ถ้า Wi-Fi ไม่ได้ค่า ให้ใช้ IP แทน
       if (
         !networkIdentifier ||
         networkIdentifier === "Wi-Fi (No SSID)" ||
@@ -32,27 +34,40 @@ export default function useLogin() {
         networkIdentifier = deviceInfo.ipAddress;
       }
 
-      // Log ก่อนส่งไป checkLogin
+      // ✅ Check login ก่อน
       console.log("🔹 Sending to checkLogin:", {
         username,
         deviceName: deviceInfo.deviceName,
         networkIdentifier,
       });
-
-      console.log("🔍 Checking login...");
       const checkResult = await checkLogin(
         username,
         deviceInfo.wifiName || deviceInfo.ipAddress,
         deviceInfo.deviceName
       );
-
       console.log("✅ Check login success:", checkResult);
 
-      // Step 2: Proceed with actual login
+      // ✅ Login จริง
       console.log("🔐 Proceeding with login...");
       const data = await login(username, password, deviceInfo);
       console.log("✅ Login success:", data);
 
+      // ✅ เก็บ token และ user ลงใน store
+      const token = data?.data_id?.token;
+      if (token) {
+        setToken(token);
+        setUser({
+          code: data.data_id.CODE,
+          name: data.data_id.MYNAMETH,
+          active: data.data_id.ACTIVEPUBLIC,
+        });
+
+        console.log("🟢 Token saved to store:", token);
+
+        console.log("🔹 Token from store:", useAuthStore.getState().token);
+      }
+
+      // ✅ แสดงผลบน Alert
       const deviceDisplay = `ອຸປະກອນທີ່ເຂົ້າສູ່ລະບົບ:
 
 📱 ຊື່ອຸປະກອນ: ${deviceInfo.deviceName}
@@ -73,7 +88,8 @@ export default function useLogin() {
       console.error("Login error:", error);
       Alert.alert(
         "ເກີດຂໍ້ຜິດພາດ",
-        error.response?.data?.message || "ຊື່ຜູ້ໃຊ້ ຫຼື ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ"
+        error.response?.data?.message ||
+          "ຊື່ຜູ້ໃຊ້ ຫຼື ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ"
       );
     } finally {
       setLoading(false);

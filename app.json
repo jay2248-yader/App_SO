@@ -10,13 +10,15 @@
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#ffffff",
+      "reactNativeRuntime": "classic"
     },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.jjay3333.APP-PO",
-       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "ແອັບນີ້ຕ້ອງການໃຊ້ຕຳແໜ່ງເພື່ອສະແດງຂໍ້ມູນ Wi-Fi."
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "ແອັບນີ້ຕ້ອງການໃຊ້ຕຳແໜ່ງເພື່ອສະແດງຂໍ້ມູນ Wi-Fi.",
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
@@ -36,12 +38,17 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
+
       "expo-font"
-      
     ],
     "fonts": [
       "./assets/fonts/NotoSansLao/NotoSansLao-Bold.ttf",
       "./assets/fonts/NotoSansLao/NotoSansLao-Regular.ttf"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "17c8e999-126e-49f4-aa88-6921d7631f31"
+      }
+    }
   }
 }
