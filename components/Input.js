@@ -2,22 +2,37 @@ import React, { useState } from 'react';
 import { View, TextInput, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-export default function Input({ label, value, onChangeText, placeholder, secureTextEntry }) {
-
-  //State show password
+export default function Input({
+  label,
+  value,
+  onChangeText,
+  placeholder,
+  secureTextEntry,
+  colorScheme = 'light', // 👉 'light' = สีขาว, 'dark' = สีดำ
+}) {
   const [showPassword, setShowPassword] = useState(false);
+
+  // 🎨 เปลี่ยนสีตามธีม
+  const isLight = colorScheme === 'light';
+  const color = isLight ? '#fff' : '#000';
 
   return (
     <View style={styles.container}>
-      {label && <Text style={styles.label}>{label}</Text>}
+      {label && <Text style={[styles.label, { color }]}>{label}</Text>}
       <View style={styles.inputWrapper}>
         <TextInput
           value={value}
           onChangeText={onChangeText}
           placeholder={placeholder}
-           placeholderTextColor="#fff"
+          placeholderTextColor={color}
           secureTextEntry={secureTextEntry && !showPassword}
-          style={styles.input}
+          style={[
+            styles.input,
+            {
+              borderColor: color,
+              color: color,
+            },
+          ]}
           autoCapitalize="none"
         />
         {secureTextEntry && (
@@ -28,7 +43,7 @@ export default function Input({ label, value, onChangeText, placeholder, secureT
             <Ionicons
               name={showPassword ? 'eye-off-outline' : 'eye-outline'}
               size={22}
-              color="#fff"
+              color={color}
             />
           </TouchableOpacity>
         )}
@@ -45,8 +60,7 @@ const styles = StyleSheet.create({
   label: {
     marginBottom: 5,
     fontSize: 14,
-    color: 'white',
-    fontFamily: "NotoSansLao-Regular",
+    fontFamily: 'NotoSansLao-Regular',
   },
   inputWrapper: {
     position: 'relative',
@@ -54,17 +68,15 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: '#fff',
-     color: 'white', 
     borderRadius: 8,
     paddingHorizontal: 10,
     paddingVertical: 8,
-    paddingRight: 45, 
+    paddingRight: 45,
     fontSize: 16,
     backgroundColor: 'transparent',
-    fontFamily: "NotoSansLao-Regular",
+    fontFamily: 'NotoSansLao-Regular',
   },
- eyeIcon: {
+  eyeIcon: {
     position: 'absolute',
     right: 12,
     top: 0,
@@ -72,6 +84,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 5,
-
   },
 });

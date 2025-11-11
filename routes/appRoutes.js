@@ -7,14 +7,13 @@ import { useAuthStore } from "../store/authStore";
 
 // ซ่อน warning ที่ไม่จำเป็นใน development
 LogBox.ignoreLogs([
-  'The action',
-  'was not handled by any navigator',
+  "The action",
+  "was not handled by any navigator",
 ]);
 
 // screens
 import LoginScreen from "../screen/loginScreen";
-import HomeScreen from "../screen/homeScreen";
-
+import MainTabs from "./mainTabs"; // ✅ import MainTabs แทน HomeScreen
 
 const Stack = createNativeStackNavigator();
 
@@ -24,16 +23,15 @@ export default function AppRoutes() {
   return (
     <NavigationContainer
       onStateChange={(state) => {
-        // Suppress navigation warnings in development
         if (__DEV__) {
-          console.log('Navigation state changed');
+          console.log("Navigation state changed");
         }
       }}
     >
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {token ? (
-          // ✅ ถ้ามี token -> เข้าสู่ระบบแล้ว
-          <Stack.Screen name="Home" component={HomeScreen} />
+          // ✅ ถ้ามี token -> ไปหน้า MainTabs ที่มี BottomNavigationBar อยู่ตลอด
+          <Stack.Screen name="MainTabs" component={MainTabs} />
         ) : (
           // ❌ ถ้ายังไม่มี token -> แสดงหน้า Login
           <Stack.Screen name="Login" component={LoginScreen} />

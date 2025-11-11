@@ -1,30 +1,18 @@
-import React, { useState } from "react";
+// src/screen/HomeScreen.js
+import React from "react";
 import { View, Text, StyleSheet, StatusBar, TouchableOpacity } from "react-native";
 import BottomNavigationBar from "../components/BottomNavigationBar";
-import { useAuthStore } from "../store/authStore";
+import useHomeScreen from "../hook/useHome";
 
 export default function HomeScreen() {
-  const [activeTab, setActiveTab] = useState("ຫນ້າຫຼັກ");
-  const logout = useAuthStore((state) => state.logout);
-  const token = useAuthStore((state) => state.token);
-  const user = useAuthStore((state) => state.user);
-
-  const tabs = [
-    { name: "ຫນ້າຫຼັກ", icon: "home-outline" },
-    { name: "ລູກຄ້າ", icon: "person-outline" },
-    { name: "ໃບສະເໜີລາຄາ", icon: "document-text-outline" },
-    { name: "ລາຍງານ", icon: "bar-chart-outline" },
-    { name: "ການຕັ້ງຄ່າ", icon: "settings-outline" },
-  ];
-
-  const handleTabPress = (tabName) => {
-    setActiveTab(tabName);
-    console.log("Tab pressed:", tabName);
-  };
-
-  const handleLogout = () => {
-    logout(); // ✅ ล้าง token และ user (navigation จะเปลี่ยนอัตโนมัติ)
-  };
+  const {
+    tabs,
+    activeTab,
+    handleTabPress,
+    handleLogout,
+    token,
+    user,
+  } = useHomeScreen();
 
   return (
     <View style={styles.container}>
@@ -32,28 +20,23 @@ export default function HomeScreen() {
       <View style={styles.content}>
         <Text style={styles.text}>Current Tab: {activeTab}</Text>
 
-        {/* แสดงข้อมูลจาก MMKV Store */}
+        {/* แสดงข้อมูลจาก Store */}
         <View style={styles.storeInfo}>
           <Text style={styles.label}>Token:</Text>
           <Text style={styles.value}>{token || "ບໍ່ມີ Token"}</Text>
-          
+
           <Text style={styles.label}>User:</Text>
           <Text style={styles.value}>
             {user ? JSON.stringify(user, null, 2) : "ບໍ່ມີຂໍ້ມູນ User"}
           </Text>
         </View>
 
-        {/* ✅ ปุ่ม Logout */}
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
           <Text style={styles.logoutText}>Logout</Text>
         </TouchableOpacity>
       </View>
 
-      <BottomNavigationBar
-        tabs={tabs}
-        activeTab={activeTab}
-        onTabPress={handleTabPress}
-      />
+
     </View>
   );
 }
