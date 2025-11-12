@@ -1,7 +1,6 @@
 // src/screen/HomeScreen.js
 import React from "react";
 import { View, Text, StyleSheet, StatusBar, TouchableOpacity } from "react-native";
-import BottomNavigationBar from "../components/BottomNavigationBar";
 import useHomeScreen from "../hook/useHome";
 
 export default function HomeScreen() {

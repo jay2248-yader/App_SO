@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
+import React, { useState } from "react";
+import { View, Text, StyleSheet, SafeAreaView } from "react-native";
 
-import Input from '../components/Input';
-import Button from '../components/Button';
+import Input from "../components/Input";
+import Button from "../components/Button";
+import QuotationList from "../components/quotationList";
+
+
 
 export default function QuotationScreen() {
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
 
   const handleSearch = () => {
-    // ฟังก์ชันสำหรับค้นหา
-    console.log('Searching for:', searchText);
+    console.log("Searching for:", searchText);
   };
 
   return (
@@ -27,20 +29,29 @@ export default function QuotationScreen() {
             value={searchText}
             onChangeText={setSearchText}
             colorScheme="dark"
+            style={{ height: 60 }}
+            iconName="search"
+            iconSize={30}
+            iconPosition="right"
           />
         </View>
         <View style={styles.buttonWrapper}>
           <Button
-            title="ຄົ້ນຫາ"
+            title="ສ້າງໃບສະເໜີ"
             onPress={handleSearch}
-        
+            iconName="description"
+            style={{
+              backgroundColor: "#294aa5",
+              height: 60, 
+              borderRadius: 10,
+            }}
           />
         </View>
       </View>
 
-      {/* Main Content */}
-      <View style={styles.content}>
-        <Text style={styles.text}>quotationScreen</Text>
+      {/* ✅ Quotation List */}
+      <View style={styles.listContainer}>
+        <QuotationList />
       </View>
     </SafeAreaView>
   );
@@ -49,28 +60,26 @@ export default function QuotationScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F7F9FC',
+    backgroundColor: "#fff",
   },
   header: {
-    backgroundColor: '#fff',
+
     paddingVertical: 18,
     paddingHorizontal: 20,
-    alignItems: 'flex-start',
-    justifyContent: 'center',
+    alignItems: "flex-start",
+    justifyContent: "center",
   },
   headerText: {
-    color: '#000',
+    color: "#000",
     fontSize: 30,
-    fontWeight: '700',
-    fontFamily: 'NotoSansLao-Bold',
+    fontWeight: "700",
+    fontFamily: "NotoSansLao-Bold",
   },
   searchContainer: {
-    backgroundColor: '#fff',
     paddingHorizontal: 20,
     paddingVertical: 16,
     marginTop: 2,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
     gap: 12,
   },
   inputWrapper: {
@@ -78,16 +87,12 @@ const styles = StyleSheet.create({
   },
   buttonWrapper: {
     minWidth: 100,
-    backgroundColor: '000',
   },
-  content: {
+  listContainer: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  text: {
-    fontSize: 18,
-    fontWeight: '500',
-    color: '#333',
+    backgroundColor: "#fff",
+    marginTop: 4,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
   },
 });
