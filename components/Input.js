@@ -1,35 +1,52 @@
-import React, { useState } from 'react';
-import { View, TextInput, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import React, { useState } from "react";
+import {
+  View,
+  TextInput,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+
+import EyeSharp from "../assets/Icon/eye-sharp.svg";
+import EyeSlash from "../assets/Icon/eye-slash.svg";
 
 export default function Input({
   label,
+  labelStyle,
   value,
   onChangeText,
   placeholder,
   secureTextEntry,
-  colorScheme = 'light',
+  colorScheme = "light",
   style,
-  iconName, // ชื่อไอคอนจาก Ionicons
+  iconName,
   iconColor,
   iconSize = 22,
-  iconPosition = 'left', // 'left' หรือ 'right'
+  iconPosition = "left",
+  onSubmit,
+  placeholderTextColor,
+  editable = true,
 }) {
   const [showPassword, setShowPassword] = useState(false);
-  const isLight = colorScheme === 'light';
-  const color = isLight ? '#fff' : '#000';
+
+  const isLight = colorScheme === "light";
+  const color = isLight ? "#fff" : "#000";
   const finalIconColor = iconColor || color;
 
-  // คำนวณ padding ตามตำแหน่งไอคอน
-  const paddingLeft = iconName && iconPosition === 'left' ? 40 : 10;
-  const paddingRight = secureTextEntry || (iconName && iconPosition === 'right') ? 40 : 10;
+  const paddingLeft = iconName && iconPosition === "left" ? 40 : 10;
+  const paddingRight =
+    secureTextEntry || (iconName && iconPosition === "right") ? 40 : 10;
 
   return (
     <View style={styles.container}>
-      {label && <Text style={[styles.label, { color }]}>{label}</Text>}
+      {label && (
+        <Text style={[styles.label, { color }, labelStyle]}>{label}</Text>
+      )}
+
       <View style={styles.inputWrapper}>
-        {/* ไอคอนด้านซ้าย */}
-        {iconName && iconPosition === 'left' && (
+        {/* ไอคอนซ้าย */}
+        {iconName && iconPosition === "left" && (
           <View style={styles.leftIcon}>
             <Ionicons name={iconName} size={iconSize} color={finalIconColor} />
           </View>
@@ -39,39 +56,37 @@ export default function Input({
           value={value}
           onChangeText={onChangeText}
           placeholder={placeholder}
-          placeholderTextColor={color}
+          placeholderTextColor={placeholderTextColor}
           secureTextEntry={secureTextEntry && !showPassword}
           style={[
             styles.input,
-            { 
-              borderColor: color, 
-              color: color,
-              paddingLeft,
-              paddingRight,
-            },
+            { borderColor: color, color, paddingLeft, paddingRight },
             style,
           ]}
           autoCapitalize="none"
+          returnKeyType="done"
+          onSubmitEditing={onSubmit}
+          editable={editable}
         />
 
-        {/* ไอคอนด้านขวา (ถ้าไม่ใช่ secureTextEntry) */}
-        {iconName && iconPosition === 'right' && !secureTextEntry && (
+        {/* ไอคอนขวา */}
+        {iconName && iconPosition === "right" && !secureTextEntry && (
           <View style={styles.rightIcon}>
             <Ionicons name={iconName} size={iconSize} color={finalIconColor} />
           </View>
         )}
 
-        {/* ปุ่มแสดง/ซ่อนรหัสผ่าน */}
+        {/* แสดง/ซ่อนรหัสผ่านด้วย SVG */}
         {secureTextEntry && (
           <TouchableOpacity
             style={styles.eyeIcon}
             onPress={() => setShowPassword(!showPassword)}
           >
-            <Ionicons
-              name={showPassword ? 'eye-off-outline' : 'eye-outline'}
-              size={22}
-              color={color}
-            />
+            {showPassword ? (
+              <EyeSlash width={22} height={22} fill={color} />
+            ) : (
+              <EyeSharp width={22} height={22} fill={color} />
+            )}
           </TouchableOpacity>
         )}
       </View>
@@ -81,53 +96,49 @@ export default function Input({
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 15,
-    width: '100%',
+    width: "100%",
   },
   label: {
     marginBottom: 5,
     fontSize: 14,
-    fontFamily: 'NotoSansLao-Regular',
+    fontFamily: "NotoSansLao-Regular",
   },
   inputWrapper: {
-    position: 'relative',
-    width: '100%',
-    alignItems: 'stretch',
+    position: "relative",
+    width: "100%",
+    alignItems: "stretch",
   },
   input: {
     borderWidth: 1,
     borderRadius: 8,
     height: 45,
     fontSize: 16,
-    backgroundColor: 'transparent',
-    fontFamily: 'NotoSansLao-Regular',
+    backgroundColor: "transparent",
+    fontFamily: "NotoSansLao-Regular",
   },
   leftIcon: {
-    position: 'absolute',
+    position: "absolute",
     left: 12,
     top: 0,
     bottom: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   rightIcon: {
-    position: 'absolute',
+    position: "absolute",
     right: 12,
     top: 0,
     bottom: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   eyeIcon: {
-    position: 'absolute',
+    position: "absolute",
     right: 12,
     top: 0,
     bottom: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     paddingHorizontal: 5,
-    zIndex: 1,
   },
 });

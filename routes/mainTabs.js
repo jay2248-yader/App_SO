@@ -9,6 +9,7 @@ import {
   Platform,
 } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 
 // Screens
@@ -17,9 +18,23 @@ import CustomerScreen from '../screen/customerScreen';
 import QuotationScreen from '../screen/quotationScreen';
 import ReportScreen from '../screen/reportScreen';
 import SettingsScreen from '../screen/settingsScreen';
+import ProductScreen from '../screen/productScreen';
+
+
+//Icon
+import House from '../assets/Icon/house-solid.svg'
+import People from '../assets/Icon/user-solid.svg'
+import Document from '../assets/Icon/file-invoice-solid.svg'
+import Chart from '../assets/Icon/chart-column-solid.svg'
+import Gear from '../assets/Icon/gear-sharp.svg'
+
+
+
+
 
 const { width } = Dimensions.get('window');
 const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
 
 // ขนาด responsive
 const isSmallDevice = width < 450;
@@ -81,7 +96,7 @@ function CustomTabBar({ state, descriptors, navigation }) {
   const getIconName = (routeName) => {
     switch (routeName) {
       case 'ຫນ້າຫຼັກ':
-        return 'home';
+        return 'house';
       case 'ລູກຄ້າ':
         return 'people';
       case 'ໃບສະເໜີລາຄາ':
@@ -92,6 +107,25 @@ function CustomTabBar({ state, descriptors, navigation }) {
         return 'settings';
       default:
         return 'help-circle';
+    }
+  };
+
+  const renderIcon = (routeName, isActive) => {
+    const color = isActive ? '#fff' : '#e0e0e0';
+    
+    switch (routeName) {
+      case 'ຫນ້າຫຼັກ':
+        return <House width={ICON_SIZE} height={ICON_SIZE} fill={color} />;
+      case 'ລູກຄ້າ':
+        return <People width={ICON_SIZE} height={ICON_SIZE} fill={color} />;
+      case 'ໃບສະເໜີລາຄາ':
+        return <Document width={ICON_SIZE} height={ICON_SIZE} fill={color} />;
+      case 'ລາຍງານ':
+        return <Chart width={ICON_SIZE} height={ICON_SIZE} fill={color} />;
+      case 'ການຕັ້ງຄ່າ':
+        return <Gear width={ICON_SIZE} height={ICON_SIZE} fill={color} />;
+      default:
+        return <Ionicons name="help-circle" size={ICON_SIZE} color={color} />;
     }
   };
 
@@ -106,7 +140,6 @@ function CustomTabBar({ state, descriptors, navigation }) {
           : route.name;
 
         const isActive = state.index === index;
-        const iconName = getIconName(route.name);
 
         const onPress = () => {
           const event = navigation.emit({
@@ -143,11 +176,7 @@ function CustomTabBar({ state, descriptors, navigation }) {
                   isActive && styles.activeIconWrapper,
                 ]}
               >
-                <Ionicons
-                  name={iconName}
-                  size={ICON_SIZE}
-                  color={isActive ? '#fff' : '#e0e0e0'}
-                />
+                {renderIcon(route.name, isActive)}
               </View>
               <Text
                 style={[
@@ -167,6 +196,16 @@ function CustomTabBar({ state, descriptors, navigation }) {
   );
 }
 
+// Stack Navigator สำหรับ Quotation Flow
+function QuotationStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="QuotationList" component={QuotationScreen} />
+      <Stack.Screen name="ProductScreen" component={ProductScreen} />
+    </Stack.Navigator>
+  );
+}
+
 export default function MainTabs() {
   return (
     <Tab.Navigator
@@ -177,7 +216,7 @@ export default function MainTabs() {
     >
       <Tab.Screen name="ຫນ້າຫຼັກ" component={HomeScreen} />
       <Tab.Screen name="ລູກຄ້າ" component={CustomerScreen} />
-      <Tab.Screen name="ໃບສະເໜີລາຄາ" component={QuotationScreen} />
+      <Tab.Screen name="ໃບສະເໜີລາຄາ" component={QuotationStack} />
       <Tab.Screen name="ລາຍງານ" component={ReportScreen} />
       <Tab.Screen name="ການຕັ້ງຄ່າ" component={SettingsScreen} />
     </Tab.Navigator>

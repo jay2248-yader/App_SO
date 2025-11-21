@@ -27,7 +27,7 @@ export default function LoginScreen() {
 
   return (
     <LinearGradient
-      colors={["#1449d9ff", "#00c6ff"]}
+      colors={["#1449d9ff", "#1449d9ff"]}
       style={styles.gradient}
       start={{ x: 1, y: 1 }}
       end={{ x: 1, y: 1 }}
@@ -48,6 +48,7 @@ export default function LoginScreen() {
               <Text style={styles.label}>ລະຫັດພະນັກງານ</Text>
               <Input
                 placeholder="ກະລຸນາໃສ່ລະຫັດພະນັກງານ"
+                placeholderTextColor={"#fff"}
                 value={username}
                 onChangeText={setUsername}
               />
@@ -57,6 +58,7 @@ export default function LoginScreen() {
               <Text style={styles.label}>ລະຫັດຜ່ານ</Text>
               <Input
                 placeholder="ກະລຸນາໃສ່ລະຫັດຜ່ານ"
+                placeholderTextColor={"#fff"}
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
@@ -69,6 +71,10 @@ export default function LoginScreen() {
                 title={loading ? "ກຳລັງເຂົ້າ..." : "ເຂົ້າສູ່ລະບົບ"}
                 onPress={() => handleLogin(username, password)}
                 disabled={loading}
+                 style={{ 
+                  backgroundColor: "#fff",
+                  }}
+                textStyle={{ color: "#1449d9ff" }} 
               />
             </View>
           </View>
@@ -95,11 +101,6 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     borderRadius: 24,
     padding: 32,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.3,
-    shadowRadius: 20,
-    elevation: 10,
   },
   header: {
     marginBottom: 24,
@@ -125,7 +126,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   inputContainer: {
-    marginBottom: 10,
+    marginBottom: 30,
   },
   label: {
     fontSize: 16,
@@ -136,5 +137,6 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginTop: 12,
+ 
   },
 });

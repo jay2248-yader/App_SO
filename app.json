@@ -10,8 +10,7 @@
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff",
-      "reactNativeRuntime": "classic"
+      "backgroundColor": "#ffffff"
     },
     "ios": {
       "supportsTablet": true,
@@ -38,12 +37,8 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-
-      "expo-font"
-    ],
-    "fonts": [
-      "./assets/fonts/NotoSansLao/NotoSansLao-Bold.ttf",
-      "./assets/fonts/NotoSansLao/NotoSansLao-Regular.ttf"
+      "expo-font",
+      "expo-asset"
     ],
     "extra": {
       "eas": {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons'; // ✅ ใช้สำหรับแสดงไอคอน
+import { MaterialIcons } from '@expo/vector-icons';
 
 export default function Button({
   title,
@@ -8,9 +8,10 @@ export default function Button({
   disabled,
   style,
   textStyle,
-  iconName, // ✅ ชื่อ icon ที่จะใช้
+  iconName,
   iconColor = '#fff',
   iconSize = 22,
+  icon, // ✅ รองรับ SVG หรือ JSX icon
 }) {
   return (
     <TouchableOpacity
@@ -26,8 +27,11 @@ export default function Button({
       <View style={styles.content}>
         <Text style={[styles.text, textStyle]}>{title}</Text>
 
-        {/* ✅ แสดงไอคอนถ้ามี (อยู่ต่อท้าย text) */}
-        {iconName && (
+        {/* 🔵 ถ้าส่ง SVG icon มา → ใช้อันนี้ */}
+        {icon && <View style={{ marginLeft: 6 }}>{icon}</View>}
+
+        {/* 🟢 ถ้าไม่ส่ง SVG แต่มี iconName → ใช้ MaterialIcons */}
+        {!icon && iconName && (
           <MaterialIcons name={iconName} size={iconSize} color={iconColor} />
         )}
       </View>
@@ -50,12 +54,12 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 20,
     fontFamily: 'NotoSansLao-Bold',
   },
   content: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8, // ✅ ระยะห่างระหว่าง text กับ icon
+    gap: 8,
   },
 });

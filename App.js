@@ -1,34 +1,45 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View } from "react-native";
+import { useEffect } from "react";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
 
 // ✅ นำเข้า Routes ที่เราสร้าง
 import AppRoutes from "./routes/appRoutes";
 
-// ✅ ถ้ามี global font ให้ใช้ตรงนี้เลย
+// ป้องกัน splash screen หายไปก่อนโหลด fonts เสร็จ
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  const [fontsLoaded] = useFonts({
+  const [fontsLoaded, fontError] = useFonts({
     "NotoSansLao-Regular": require("./assets/fonts/NotoSansLao/NotoSansLao-Regular.ttf"),
     "NotoSansLao-Bold": require("./assets/fonts/NotoSansLao/NotoSansLao-Bold.ttf"),
   });
 
   useEffect(() => {
-    if (fontsLoaded) {
-      SplashScreen.hideAsync();
+    async function prepare() {
+      try {
+        if (fontsLoaded || fontError) {
+          await SplashScreen.hideAsync();
+        }
+      } catch (e) {
+        console.warn(e);
+      }
     }
-  }, [fontsLoaded]);
+    prepare();
+  }, [fontsLoaded, fontError]);
 
-  if (!fontsLoaded) {
+  // แสดง app แม้ว่า fonts จะโหลดไม่สำเร็จ
+  if (!fontsLoaded && !fontError) {
     return null;
+  }
+
+  if (fontError) {
+    console.error("Font loading error:", fontError);
   }
 
   return (
     <View style={styles.container}>
-      {/* ✅ ใช้ Routes แทน LoginScreen */}
       <AppRoutes />
       <StatusBar style="auto" />
     </View>
